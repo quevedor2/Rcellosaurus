@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples data(melt.cells)
-#' cvcl <- getCVCL('Hela')
+#' cvcl <- getCVCL('Hela', melt.cells)
 #' fullpull(cvcl, melt.cells)
 #'
 #' fullpull("HeLa", melt.cells)
@@ -34,8 +34,9 @@ fullpull <- function(cvcl, melt.cells){
 #'
 #' @return CVCL_ style character name
 #' @export
-#'
-#' @examples getCVCL("Hela")
+#' 
+#' @examples data(melt.cells)
+#' getCVCL("Hela", melt.cells)
 getCVCL <- function(cellid, melt.cells){
   cl.match <- melt.cells[grep(paste0("^", cellid, "$"), melt.cells$ID),]
   if(nrow(cl.match) > 1) {
