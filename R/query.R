@@ -42,7 +42,7 @@ getCVCL <- function(cellid, melt.cells, prioritize.datasets=TRUE){
   cl.match <- melt.cells[grep(paste0("^", cellid, "$"), melt.cells$ID),]
 
   ## If all CVCL's are equal, just use it
-  if(length(unique(cl.match$CVCL))==1) cl.match <- unique(cl.match)
+  if(length(unique(cl.match$CVCL))==1) cl.match <- cl.match[1,]
 
 
   if(nrow(cl.match) > 1 & prioritize.datasets) {
