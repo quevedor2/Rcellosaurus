@@ -21,7 +21,7 @@ as well as any indication of MSI or probelmatic cell line (e.g. contamination)
 }
 \examples{
 data(melt.cells)
-cvcl <- getCVCL('Hela')
+cvcl <- getCVCL('Hela', melt.cells)
 fullpull(cvcl, melt.cells)
 
 fullpull("HeLa", melt.cells)

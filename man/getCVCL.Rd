@@ -19,5 +19,6 @@ get the Cellosaurus CVCL_ id for a given
 cell line name
 }
 \examples{
-getCVCL("Hela")
+data(melt.cells)
+getCVCL("Hela", melt.cells)
 }
