@@ -10,6 +10,7 @@ addOI <- function(cl.dat, melt.cells){
   melt.cells$OI <- as.character(melt.cells$OI)
   return(melt.cells)
 }
+
 add99Problems <- function(cl.dat, melt.cells){
   bitch <- 0
   pcl.data <- sapply(cl.dat, function(i){
@@ -31,6 +32,15 @@ add99Problems <- function(cl.dat, melt.cells){
   melt.cells$MSI <- as.logical(melt.cells$MSI)
   melt.cells$PCL <- as.logical(melt.cells$PCL)
   melt.cells$comment <- as.character(melt.cells$comment)
+  return(melt.cells)
+}
+
+removeFrogs <- function(cl.dat, melt.cells){
+  species <- sapply(cl.dat, function(i) i$'species-list'$'cv-term'[['text']])
+  species.df <- data.frame("CVCL"=names(cl.dat),
+                           "species"=unlist(species))
+  species.cells <- merge(melt.cells, species.df, by="CVCL", all.x=TRUE)
+  melt.cells <- melt.cells[-which(!species.cells$species=='Homo sapiens'),]
   return(melt.cells)
 }
 
@@ -56,6 +66,8 @@ createMeltCells <- function(cpath=NULL){
 
   melt.cells <- addOI(cl.dat, melt.cells)
   melt.cells <- add99Problems(cl.dat, melt.cells)
+  melt.cells <- removeFrogs(cl.dat, melt.cells)
+
   # saveRDS(melt.cells, file="cellosaurus.RDS")
   # save(cl.dat, file="cellosaurus_raw.rda")
   return(melt.cells)

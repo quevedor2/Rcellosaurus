@@ -34,11 +34,12 @@ fullpull <- function(cvcl, melt.cells){
 #'
 #' @return CVCL_ style character name
 #' @export
-#' 
+#'
 #' @examples data(melt.cells)
 #' getCVCL("Hela", melt.cells)
 getCVCL <- function(cellid, melt.cells){
   cl.match <- melt.cells[grep(paste0("^", cellid, "$"), melt.cells$ID),]
+  if(length(unique(cl.match$CVCL))==1) cl.match <- unique(cl.match$CVCL)
   if(nrow(cl.match) > 1) {
     warning("Multiple cells found for the given ID (likely contamination), please manully select 1 CVCL for further analysis")
     return(cl.match)
