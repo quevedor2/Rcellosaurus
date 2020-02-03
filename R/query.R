@@ -37,10 +37,25 @@ fullpull <- function(cvcl, melt.cells){
 #'
 #' @examples data(melt.cells)
 #' getCVCL("Hela", melt.cells)
-getCVCL <- function(cellid, melt.cells){
+getCVCL <- function(cellid, melt.cells, prioritize.datasets=TRUE){
+  # cellid <- "ES-2"
   cl.match <- melt.cells[grep(paste0("^", cellid, "$"), melt.cells$ID),]
+
+  ## If all CVCL's are equal, just use it
   if(length(unique(cl.match$CVCL))==1) cl.match <- unique(cl.match)
+
+
+  if(nrow(cl.match) > 1 & prioritize.datasets) {
+    ## Check if there is a single column that matches priority list
+    priority.check <- colnames(cl.match)[8:ncol(cl.match)]
+    row.s <- rowSums(cl.match[,priority.check])
+    if(any(row.s > 0) & sum(as.logical(row.s)) == 1){
+      cl.match <- cl.match[which(row.s > 0),]
+    }
+  }
+
   if(nrow(cl.match) > 1) {
+    ## If no conclusion reached, throw everything back
     warning("Multiple cells found for the given ID (likely contamination), please manully select 1 CVCL for further analysis")
     return(cl.match)
   } else {

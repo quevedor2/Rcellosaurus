@@ -44,6 +44,26 @@ removeFrogs <- function(cl.dat, melt.cells){
   return(melt.cells)
 }
 
+checkForDatasets <- function(cl.dat, melt.cells){
+  ds.pattern <- c("GDSC"="COSMIC",
+                  "CCLE"="CCLE",
+                  "MD"="MD Anderson")
+
+  partof.data <- sapply(cl.dat, function(i){
+    partof <- sapply(i$'comment-list', function(j) j[['text']])
+    ds.partof <- sapply(ds.pattern, function(ds) any(grepl(ds, partof)))
+    return(ds.partof)
+  })
+  partof.data <- as.data.frame(t(partof.data))
+  partof.data$CVCL <- names(cl.dat)
+
+  melt.cells <- merge(melt.cells, partof.data, by="CVCL", all.x=TRUE)
+  for(i in colnames(partof.data)[-ncol(partof.data)]){
+    melt.cells[,i] <- as.logical(melt.cells[,i])
+  }
+  return(melt.cells)
+}
+
 createMeltCells <- function(cpath=NULL){
   require(reshape)
   require(XML)
@@ -67,6 +87,7 @@ createMeltCells <- function(cpath=NULL){
   melt.cells <- addOI(cl.dat, melt.cells)
   melt.cells <- add99Problems(cl.dat, melt.cells)
   melt.cells <- removeFrogs(cl.dat, melt.cells)
+  melt.cells <- checkForDatasets(cl.dat, melt.cells)
 
   # saveRDS(melt.cells, file="cellosaurus.RDS")
   # save(cl.dat, file="cellosaurus_raw.rda")
