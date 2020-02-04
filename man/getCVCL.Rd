@@ -4,7 +4,7 @@
 \alias{getCVCL}
 \title{getCVCL}
 \usage{
-getCVCL(cellid, melt.cells)
+getCVCL(cellid, melt.cells, prioritize.datasets = TRUE)
 }
 \arguments{
 \item{cellid}{character: cell line name (e.g. MCF-7)}
