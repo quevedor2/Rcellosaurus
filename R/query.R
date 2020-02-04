@@ -47,7 +47,7 @@ getCVCL <- function(cellid, melt.cells, prioritize.datasets=TRUE){
 
   if(nrow(cl.match) > 1 & prioritize.datasets) {
     ## Check if there is a single column that matches priority list
-    priority.check <- colnames(cl.match)[8:ncol(cl.match)]
+    priority.check <- colnames(cl.match)[9:ncol(cl.match)]
     row.s <- rowSums(cl.match[,priority.check])
     if(any(row.s > 0) & sum(as.logical(row.s)) == 1){
       cl.match <- cl.match[which(row.s > 0),]

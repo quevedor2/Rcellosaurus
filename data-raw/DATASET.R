@@ -4,10 +4,17 @@ addOI <- function(cl.dat, melt.cells){
     oi <- i$'derived-from'$'cv-term'$'.attrs'['accession']
     if(is.null(oi)) NA else as.character(oi)
   })
+  so.data <- lapply(cl.dat, function(i){
+    oi <- i$'same-origin-as'$'cv-term'$'.attrs'['accession']
+    if(is.null(oi)) NA else as.character(oi)
+  })
   melt.df <- data.frame("CVCL"=names(cl.dat),
-                        "OI"=unlist(df.data))
+                        "OI"=unlist(df.data),
+                        "SO"=unlist(so.data))
   melt.cells <- merge(melt.cells, melt.df, by="CVCL", all.x=TRUE)
   melt.cells$OI <- as.character(melt.cells$OI)
+  melt.cells$SO <- as.character(melt.cells$SO)
+
   return(melt.cells)
 }
 
