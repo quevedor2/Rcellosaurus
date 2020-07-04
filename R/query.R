@@ -16,12 +16,17 @@
 #'
 #' fullpull("HeLa", melt.cells)
 fullpull <- function(cvcl, melt.cells){
-  if(!substr(cvcl, 1, 5) == "CVCL_"){
-    cvcl <- getCVCL(cvcl, melt.cells)
-    if(class(cvcl) == 'data.frame' | length(cvcl) == 0) stop("Could not find the CVCL id for given input")
+  if(!is.na(cvcl)){
+    if(!substr(cvcl, 1, 5) == "CVCL_"){
+      cvcl <- Rcellosaurus::getCVCL(cvcl, melt.cells)
+      if(class(cvcl) == 'data.frame' | length(cvcl) == 0) stop("Could not find the CVCL id for given input")
+    }
   }
-  rbind(.getSynonymous(cvcl, melt.cells),
-        .getDerivedFrom(cvcl, melt.cells))
+
+  tryCatch({
+    rbind(Rcellosaurus:::.getSynonymous(cvcl, melt.cells),
+          Rcellosaurus:::.getDerivedFrom(cvcl, melt.cells))
+  }, error=function(e){NULL})
 }
 
 
